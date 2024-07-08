@@ -1,0 +1,49 @@
+# STM32 gitignore
+
+# Ignore all
+*
+
+# Unignore all dirs
+!*/
+
+## Except
+
+# Program files
+!*.c
+!*.h
+!*.s
+
+# IAR project
+!*.ewd
+!*.ewp
+!*.ewt
+!*.eww
+
+# IAR Linker files
+!*.icf
+
+# stm32cube project
+!*.ioc
+
+# Eclipse project
+!*.cproject
+!*.project
+!*.ld
+
+# MDK-ARM project
+!*.uvprojx
+!*.uvproj
+#MDK-ARM Linker
+!*.sct
+
+# gitignore
+!.gitignore
+
+# Markdown files
+!*.md
+
+!*.jpg
+!*.txt
+/MDK-ARM/output/
+/MDK-ARM//Listings/
+/MDK-ARM//DebugConfig/
