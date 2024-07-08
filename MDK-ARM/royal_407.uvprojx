@@ -338,9 +338,9 @@
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls>--no_strict --gnu</MiscControls>
-              <Define>USE_STDPERIPH_DRIVER,STM32F4XX,USE_STM324xG_EVAL,PB_NO_STATIC_ASSERT,PB_FIELD_16BIT</Define>
+              <Define>USE_STDPERIPH_DRIVER,STM32F4XX,</Define>
               <Undefine></Undefine>
-              <IncludePath>..\inc;..\STM32F4xx_StdPeriph_Driver\inc;..\CMSIS\Include;..\CMSIS\Device\ST\STM32F4xx\Include;..\contiki;..\contiki\lib;..\contiki\sys</IncludePath>
+              <IncludePath>..\inc;..\STM32F4xx_StdPeriph_Driver\inc;..\CMSIS\Include;..\CMSIS\Device\ST\STM32F4xx\Include;..\contiki;..\contiki\lib;..\contiki\sys;..\mavlink;..\mavlink\common;..\mavlink\minimal</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -806,6 +806,46 @@
               <FileName>timer.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\contiki\sys\timer.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>mavlink</GroupName>
+          <Files>
+            <File>
+              <FileName>checksum.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\mavlink\checksum.h</FilePath>
+            </File>
+            <File>
+              <FileName>mavlink_conversions.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\mavlink\mavlink_conversions.h</FilePath>
+            </File>
+            <File>
+              <FileName>mavlink_get_info.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\mavlink\mavlink_get_info.h</FilePath>
+            </File>
+            <File>
+              <FileName>mavlink_helpers.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\mavlink\mavlink_helpers.h</FilePath>
+            </File>
+            <File>
+              <FileName>mavlink_sha256.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\mavlink\mavlink_sha256.h</FilePath>
+            </File>
+            <File>
+              <FileName>mavlink_types.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\mavlink\mavlink_types.h</FilePath>
+            </File>
+            <File>
+              <FileName>protocol.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\mavlink\protocol.h</FilePath>
             </File>
           </Files>
         </Group>

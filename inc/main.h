@@ -12,7 +12,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include "contiki.h"
-
+#include "mavlink.h"
 
 
 #endif /* __MAIN_H */
