@@ -13,6 +13,13 @@
 #include <stdio.h>
 #include "contiki.h"
 #include "mavlink.h"
+//
+#include "spi.h"
+//#include "dhsp.h"
+#include "socket.h"
+#include "task_udp.h"
+
+
 
 
 #endif /* __MAIN_H */
