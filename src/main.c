@@ -77,6 +77,9 @@ int main(void)
     // запуск светика индикации работы и юдп процесса на w5500, должен пинговаться 192.168.0.20
     process_start(&led_process, NULL);
     process_start(&task_udp_process, NULL);
+		// запуск клавиатуры
+    process_start(&button_process, NULL);
+		//
     while (1)
     {
     }

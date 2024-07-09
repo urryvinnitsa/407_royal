@@ -94,7 +94,7 @@ PROCESS_THREAD(task_udp_process, ev, data)
             switch (mode_init)
             {
             case INIT_PIN:
-                //                      close(0);
+                //         
                 SPI1_Init(); // SPI2: b3 b4 b5
                 register_wizchip();
                 W5500_CS_Init(); // Initialize W5500,  RST INT

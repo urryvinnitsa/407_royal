@@ -15,9 +15,13 @@
 #include "mavlink.h"
 //
 #include "spi.h"
-//#include "dhsp.h"
+#include "dhcp.h"
 #include "socket.h"
 #include "task_udp.h"
+
+#include "hard_config.h"
+#include "buttons.h"
+
 
 
 

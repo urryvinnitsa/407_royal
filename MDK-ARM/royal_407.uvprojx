@@ -483,6 +483,26 @@
               <FileType>1</FileType>
               <FilePath>..\src\stm32f4xx_it.c</FilePath>
             </File>
+            <File>
+              <FileName>buttons.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\buttons.c</FilePath>
+            </File>
+            <File>
+              <FileName>buttons.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\inc\buttons.h</FilePath>
+            </File>
+            <File>
+              <FileName>hard_config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\inc\hard_config.h</FilePath>
+            </File>
+            <File>
+              <FileName>main.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\inc\main.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
