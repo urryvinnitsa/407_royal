@@ -9,7 +9,7 @@
 #define BIT_TST1(var,bitno) ((var) & (1 << (bitno)))
 
 
-
+// кнопки
 #define B0_PORT GPIOB
 #define B0_PIN  GPIO_Pin_0
 #define B1_PORT GPIOB
@@ -42,6 +42,39 @@
 #define B14_PIN  GPIO_Pin_0
 #define B15_PORT GPIOB
 #define B15_PIN  GPIO_Pin_0
-
+// светодиоды
+#define L0_PORT GPIOB
+#define L0_PIN  GPIO_Pin_0
+#define L1_PORT GPIOB
+#define L1_PIN  GPIO_Pin_0
+#define L2_PORT GPIOB
+#define L2_PIN  GPIO_Pin_0
+#define L3_PORT GPIOB
+#define L3_PIN  GPIO_Pin_0
+#define L4_PORT GPIOB
+#define L4_PIN  GPIO_Pin_0
+#define L5_PORT GPIOB
+#define L5_PIN  GPIO_Pin_0
+#define L6_PORT GPIOB
+#define L6_PIN  GPIO_Pin_0
+#define L7_PORT GPIOB
+#define L7_PIN  GPIO_Pin_0
+#define L8_PORT GPIOB
+#define L8_PIN  GPIO_Pin_0
+#define L9_PORT GPIOB
+#define L9_PIN  GPIO_Pin_0
+#define L10_PORT GPIOB
+#define L10_PIN  GPIO_Pin_0
+#define L11_PORT GPIOB
+#define L11_PIN  GPIO_Pin_0
+#define L12_PORT GPIOB
+#define L12_PIN  GPIO_Pin_0
+#define L13_PORT GPIOB
+#define L13_PIN  GPIO_Pin_0
+#define L14_PORT GPIOB
+#define L14_PIN  GPIO_Pin_0
+#define L15_PORT GPIOB
+#define L15_PIN  GPIO_Pin_0
+//
 #endif // HARD_CONFIG_H
 

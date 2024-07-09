@@ -13,7 +13,6 @@ static MODE_ETH mode_eth = INIT_ETH;
 typedef enum {INIT_PIN = 0, PAUSE_0, PAUSE_1, END_INIT} MODE_INIT;
 static MODE_INIT mode_init = INIT_PIN;
 static uint16_t delay_pause = 0;
-static uint16_t delay_reset = 0;
 int iCntUart;
 int32_t len_udp;
 int32_t len_udp2;
@@ -79,9 +78,6 @@ void network_init(void)
 //--------------------------------------------------------------------------
 PROCESS_THREAD(task_udp_process, ev, data)
 {
-    uint8_t addr[4];
-    //
-    uint16_t port;
     PROCESS_BEGIN();
     while (1)
     {
@@ -94,7 +90,7 @@ PROCESS_THREAD(task_udp_process, ev, data)
             switch (mode_init)
             {
             case INIT_PIN:
-                //         
+                //
                 SPI1_Init(); // SPI2: b3 b4 b5
                 register_wizchip();
                 W5500_CS_Init(); // Initialize W5500,  RST INT

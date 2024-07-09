@@ -503,6 +503,16 @@
               <FileType>5</FileType>
               <FilePath>..\inc\main.h</FilePath>
             </File>
+            <File>
+              <FileName>leds.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\inc\leds.h</FilePath>
+            </File>
+            <File>
+              <FileName>leds.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\leds.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
