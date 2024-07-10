@@ -17,7 +17,7 @@ static  but_t but[BUTTON_MAX];
 
 static void fnButtInit(void);
 static void fnButtRead(void);
-static void fnSetRegBt(void);
+static void fnSetRegButt(void);
 static uint16_t rez_butt = 0; // new
 static uint16_t rez_butt_old = 0; // old
 static union
@@ -57,7 +57,7 @@ PROCESS_THREAD(button_process, ev, data)
         etimer_set(&et, 1);
         PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
         fnButtRead();
-        fnSetRegBt();
+        fnSetRegButt();
     }
     PROCESS_END();
 }
@@ -100,7 +100,7 @@ static void fnButtRead(void)
     }
 }
 //---------------------------------------------------
-static void fnSetRegBt(void)
+static void fnSetRegButt(void)
 {
     for (int i = 0; i < BUTTON_MAX; i++)
     {

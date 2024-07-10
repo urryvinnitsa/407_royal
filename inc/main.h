@@ -19,13 +19,16 @@
 #include "socket.h"
 #include "task_udp.h"
 //
+#include "adc_j.h"
 #include "hard_config.h"
 #include "buttons.h"
 #include "leds.h"
 
-
-
-
+// сигналы до потоков ---
+extern process_event_t event_button;
+extern process_event_t event_1ms;
+extern process_event_t event_kill;
+//----------------------
 #endif /* __MAIN_H */
 
 

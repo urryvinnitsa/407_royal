@@ -41,10 +41,10 @@ PROCESS_THREAD(leds_process, ev, data)
     while (1)
     {
         static struct etimer et;
-        etimer_set(&et, 1);
+        etimer_set(&et, 10);
         PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
         str_led.cnt++;
-        if (str_led.cnt >= 300)
+        if (str_led.cnt >= 30)
         {
             str_led.cnt = 0;
             str_led.blink ^= 1;

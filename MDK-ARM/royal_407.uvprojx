@@ -513,6 +513,16 @@
               <FileType>1</FileType>
               <FilePath>..\src\leds.c</FilePath>
             </File>
+            <File>
+              <FileName>adc_j.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\adc_j.c</FilePath>
+            </File>
+            <File>
+              <FileName>adc_j.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\inc\adc_j.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
