@@ -149,7 +149,10 @@ void fnProcessAdc(void) // вызывается с периодичностью 
                                               1000, 2500);
         message.magic = 0xFD;//
         len = mavlink_msg_to_send_buffer((uint8_t *)buffer_sbus, &message);
-        len_real =   sendto(0, (uint8_t *) buffer_sbus, len, (uint8_t *) adr_477, 14555);
+        // отправляем пакеты в пиксу по уарту
+        fnAddBufer_Ser((uint8_t *) buffer_sbus,  len);
+        // отправляем пакеты на планку по юдп
+        len_real =   sendto(1, (uint8_t *) buffer_sbus, len, (uint8_t *) adr_all_comp, 14555);
         if (len_real != len)
         {
             cnt_err++;

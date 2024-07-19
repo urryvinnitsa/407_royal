@@ -27,7 +27,6 @@ volatile  un_packet un_ser[BUF_SIZE_READ];
 
 #pragma pack()
 static uint8_t cnt_rf = 0;
-static uint8_t cnt_ser = 0;
 PROCESS(bufer_process, "Bufer");
 
 PROCESS_THREAD(bufer_process, ev, data)
@@ -57,23 +56,6 @@ PROCESS_THREAD(bufer_process, ev, data)
                 cnt_rf = 0;
             }
         }
-        else if (fnGetBufer_Ser()  == BUFER_OK)
-        {
-            //  len_real =  sendto(2, (uint8_t *)arr_ser, len_s, (uint8_t *) adr_rem, 9999);
-            if (len_real_m != len_s)
-            {
-                cnt_ser++;
-                if (cnt_ser > 4)
-                {
-                    cnt_ser = 0;
-                    //                  fnClearEth();
-                }
-            }
-            else
-            {
-                cnt_ser = 0;
-            }
-        }
     }
     PROCESS_END();
 }
@@ -91,7 +73,7 @@ REZ_BUFER fnAddBufer_Rf(uint8_t *arr_start, uint16_t len)// добавить  в
 {
     if (NumberOfItems_Rf == BUF_SIZE_READ)  // buffer is full
     {
-        return BUFER_BUSY; //msgmav_rf.msg
+        return BUFER_BUSY; //
     }
     un_rf[strBuffData_cWrite_Rf].len = len;
     for (int i = 0; i < len; i++)

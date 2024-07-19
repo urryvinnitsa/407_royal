@@ -16,14 +16,14 @@ static uint16_t delay_pause = 0;
 int iCntUart;
 int32_t len_udp;
 int32_t len_udp2;
+
 static char start_eth = 0;
 wiz_NetInfo gWIZNETINFO;
 const uint8_t adr_all[4] = {255, 255, 255, 255};
 const uint8_t adr_my[4] = {192, 168, 0, 20};
 uint8_t memsize[2][8] = { {2, 2, 2, 2, 2, 2, 2, 2}, {2, 2, 2, 2, 2, 2, 2, 2}};
-uint8_t buff_rf[256];
+uint8_t buff_rf[512];
 const uint8_t adr_all_comp[4] = {192, 168, 0, 255};
-const uint8_t adr_477[4] = {192, 168, 0, 255};
 const uint8_t adr_868[4] = {192, 168, 0, 100};
 PROCESS(task_udp_process, "TaskUdp");
 //--------------------------------------------------------------------------
@@ -55,8 +55,8 @@ void Load_Net_Parameters(void)
     gWIZNETINFO.mac[1] = 0x29;
     gWIZNETINFO.mac[2] = 0xab;
     gWIZNETINFO.mac[3] = 0x7c;
-    gWIZNETINFO.mac[4] = 0x00;
-    gWIZNETINFO.mac[5] = 0x02;
+    gWIZNETINFO.mac[4] = 0x12;
+    gWIZNETINFO.mac[5] = 0x34;
     gWIZNETINFO.ip[0] = 192; //IP
     gWIZNETINFO.ip[1] = 168;
     gWIZNETINFO.ip[2] = 0;
@@ -79,6 +79,9 @@ void network_init(void)
 PROCESS_THREAD(task_udp_process, ev, data)
 {
     PROCESS_BEGIN();
+    uint8_t addr[4];
+    int32_t len;
+    uint16_t port;
     while (1)
     {
         static struct etimer et;
@@ -126,12 +129,31 @@ PROCESS_THREAD(task_udp_process, ev, data)
                 network_init();
                 setSHAR(gWIZNETINFO.mac);
                 ctlnetwork(CN_GET_NETINFO, (void *)&gWIZNETINFO);
-                socket(0, Sn_MR_UDP, 8888, SF_IO_NONBLOCK);
+                socket(0, Sn_MR_UDP, 8888, SF_IO_NONBLOCK);// для мп
+                socket(1, Sn_MR_UDP, 8888, SF_IO_NONBLOCK);// для планки
                 mode_eth = WORK_ETH;
                 break;
             }
             break;
         case WORK_ETH:
+            len = recvfrom(0, buff_rf, 2000, (uint8_t *) addr, &port);
+            if (len == 0xFFFFFFFB)
+            {
+                fnClearInit();
+            }
+            if (len > 0)
+            {
+                if (len != SOCK_BUSY)
+                {
+                    if (len != SOCKERR_SOCKMODE)
+                    {
+                        if (port == 14550)
+                        {
+                            fnAddBufer_Ser((uint8_t *) &buff_rf[0],  len);// отправляем пакеты в пиксу по уарту
+                        }   // вынимаем из буфера в файле link_rf.c
+                    }
+                }
+            }// end len >0
             break;
         }
         //-----------------------------------------------

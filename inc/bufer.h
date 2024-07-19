@@ -17,7 +17,7 @@ typedef enum
 } REZ_BUFER;
 
 #define ARR_SIZE_511 512
-#define ARR_SIZE_SBUS 64
+
 #pragma pack(1)
 
 typedef struct
@@ -26,10 +26,6 @@ typedef struct
     uint8_t arr[ARR_SIZE_511];
 } un_packet;
 
-typedef struct
-{
-    unsigned char arr[ARR_SIZE_SBUS];
-} un_sbus;
 #pragma pack()
 
 REZ_BUFER fnAddBufer_Rf(uint8_t *arr_start, uint16_t len);

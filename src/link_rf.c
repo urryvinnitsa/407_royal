@@ -3,7 +3,9 @@
 //**************************************************
 #include "main.h"
 // uart1 - link rf
-//
+// принятые от уарта пиксы данные отправляем на езернет (fnAddBufer_Rf)
+// полученные с езернета пакеты от мишин планнера отправляем на уарт пиксы
+// if (fnGetBufer_Ser()  == BUFER_OK)USART1SendDMA((uint8_t *)arr_ser, len_s);
 //--------------------------------------------------
 void fnDMAInit(void);
 #define ARRAY_LEN(x)            (sizeof(x) / sizeof((x)[0]))
@@ -29,10 +31,10 @@ PROCESS_THREAD(link_rf_process, ev, data)
             USART_ClearFlag(USART1, USART_IT_IDLE);
             if (send_free.u1 == 0)// дма отработал и свободен
             {
-                //                if (fnGetBufer_Ser()  == BUFER_OK)
-                //                {
-                //                    USART1SendDMA((uint8_t *)arr_ser, len_s);
-                //                }
+                if (fnGetBufer_Ser()  == BUFER_OK)
+                {
+                    USART1SendDMA((uint8_t *)arr_ser, len_s);
+                }
             }
             usart_rx_check();
         }
@@ -150,19 +152,7 @@ void usart_rx_check(void)
         /* Check change in received data */
         if (pos > old_pos)
         {
-            /*
-             * [   0   ]
-             * [   1   ] <- old_pos |------------------------------------|
-             * [   2   ]            |                                    |
-             * [   3   ]            | Single block (len = pos - old_pos) |
-             * [   4   ]            |                                    |
-             * [   5   ]            |------------------------------------|
-             * [   6   ] <- pos
-             * [   7   ]
-             * [ N - 1 ]
-             */
-            //   usart_process_data(&usart_rx_dma_buffer[old_pos], pos - old_pos);
-            //     fnAddBufer_Rf((uint8_t *) &usart_rx_dma_buffer[old_pos], pos - old_pos);
+            fnAddBufer_Rf((uint8_t *) &usart_rx_dma_buffer[old_pos], pos - old_pos);
         }
         else
         {
@@ -182,10 +172,10 @@ void usart_rx_check(void)
              * [   7   ]            |                                 |
              * [ N - 1 ]            |---------------------------------|
              */
-            //     fnAddBufer_Rf((uint8_t *) &usart_rx_dma_buffer[old_pos], ARRAY_LEN(usart_rx_dma_buffer) - old_pos);
+            fnAddBufer_Rf((uint8_t *) &usart_rx_dma_buffer[old_pos], ARRAY_LEN(usart_rx_dma_buffer) - old_pos);
             if (pos > 0)
             {
-                //        fnAddBufer_Rf((uint8_t *) &usart_rx_dma_buffer[0], pos);
+                fnAddBufer_Rf((uint8_t *) &usart_rx_dma_buffer[0], pos);
             }
         }
         old_pos = pos;                          /* Save current position as old for next transfers */
