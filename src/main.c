@@ -12,13 +12,16 @@ process_event_t event_button;
 process_event_t event_1ms;
 process_event_t event_kill;
 // ----------------------------------------------
+volatile send_free_t send_free;
+// ----------------------------------------------
+
 PROCESS(led_process, "Led");
 PROCESS_THREAD(led_process, ev, data)
 {
     static int rez = 0;
     static int cnt = 0;
     PROCESS_BEGIN();
-    // уточнить на плате 407, их там 2
+    //
     RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
     GPIO_InitTypeDef GPIO_InitStruct;
     GPIO_InitStruct.GPIO_Pin = GPIO_Pin_13 ; //
@@ -32,7 +35,7 @@ PROCESS_THREAD(led_process, ev, data)
         static struct etimer et;
         etimer_set(&et, 1);
         PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
-        process_post(&task_adc_process, event_1ms, &rez);
+        //process_post(&task_adc_process, event_1ms, &rez);
         cnt++;
         if (cnt >= 500) // период мигания светика индикации работы
         {
@@ -54,17 +57,21 @@ int main(void)
     event_button = process_alloc_event();
     event_1ms = process_alloc_event();
     event_kill = process_alloc_event();
+    process_start(&etimer_process, NULL);
     //-----------------------------------
-    // процесс заполнения структуры и создания мавлинк пакета
-    process_start(&task_adc_process, NULL);
     // запуск светика индикации работы
     process_start(&led_process, NULL);
+    // процесс заполнения структуры и создания мавлинк пакета
+    process_start(&task_adc_process, NULL);
     // запуск  юдп процесса на w5500, должен пинговаться 192.168.0.20
     process_start(&task_udp_process, NULL);
-    // запуск клавиатуры
+    //    // запуск клавиатуры
     process_start(&button_process, NULL);
-    // запуск светиков
+    //    // запуск светиков
     process_start(&leds_process, NULL);
+    //
+    // cтендовый режим - напрямую с пиксой без радиоканала
+    process_start(&link_rf_process, NULL);
     //
     while (1)
     {

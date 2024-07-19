@@ -2,6 +2,9 @@
 // Файл                     : adc_j.c
 //**************************************************
 #include "main.h"
+#include <math.h>
+#include <stdlib.h>
+
 // это для 411, для 407 уточнить в скаттер файле !!!
 #define ADR_MIN     0x08060000
 #define ADR_MAX     0x08060040
@@ -37,10 +40,9 @@ static uint16_t midl_val[6];
 static uint16_t min_val_r[6];
 static uint16_t max_val_r[6];
 static uint16_t midl_val_r[6];
-static uint8_t test_butt = 0;
 uint16_t len_real;
 static uint8_t cnt_err = 0; //  счетчик ошибок при передаче юдп пакета,
-// рестартовать все, нет смысла возиться только с 1 потоком ? 
+// рестартовать все, нет смысла возиться только с 1 потоком
 //------------------------------------
 void fnInitSize(void);
 void fnNormalize(void);
@@ -721,10 +723,9 @@ void fnGetMiddlVal(void)
 void fnSaveY(void)
 {
     FLASH_Unlock();
+    FLASH_ClearFlag(FLASH_FLAG_EOP | FLASH_FLAG_OPERR | FLASH_FLAG_WRPERR | FLASH_FLAG_PGAERR | FLASH_FLAG_PGPERR | FLASH_FLAG_PGSERR);
     FLASH_EraseSector(FLASH_Sector_7, VoltageRange_3);
-    FLASH_Lock();
     delay_ms(50);
-    FLASH_Unlock();
     uint16_t *pArr = (uint16_t *)&min_val[0];
     uint32_t start_adr = ADR_MIN;
     for (int i = 0; i < 6; i++)
