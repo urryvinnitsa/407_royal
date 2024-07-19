@@ -72,6 +72,7 @@ int main(void)
     //
     // cтендовый режим - напрямую с пиксой без радиоканала
     process_start(&link_rf_process, NULL);
+    process_start(&bufer_process, NULL);
     //
     while (1)
     {

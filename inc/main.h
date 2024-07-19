@@ -24,7 +24,7 @@
 #include "buttons.h"
 #include "leds.h"
 #include "link_rf.h"
-
+#include "bufer.h"
 // сигналы до потоков ---
 extern process_event_t event_button;
 extern process_event_t event_1ms;

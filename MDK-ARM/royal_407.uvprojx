@@ -1009,6 +1009,11 @@
               <FileType>1</FileType>
               <FilePath>..\src\system_stm32f4xx.c</FilePath>
             </File>
+            <File>
+              <FileName>bufer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\bufer.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1053,6 +1058,11 @@
               <FileName>stm32f4xx_it.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\inc\stm32f4xx_it.h</FilePath>
+            </File>
+            <File>
+              <FileName>bufer.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\inc\bufer.h</FilePath>
             </File>
           </Files>
         </Group>
