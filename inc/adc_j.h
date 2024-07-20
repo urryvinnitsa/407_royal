@@ -21,6 +21,7 @@ typedef struct
 #pragma pack()
 void fnDMA(void);
 void fnADC(void);
+void fnSaveY(void);
 extern volatile uint16_t ADCConvertedValue[24];
 #endif //ADC_J
 

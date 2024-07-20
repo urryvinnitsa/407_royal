@@ -6,11 +6,11 @@
 #include <stdlib.h>
 
 // это для 411, для 407 уточнить в скаттер файле !!!
-#define ADR_MIN     0x08060000
-#define ADR_MAX     0x08060040
-#define ADR_MIDL    0x08060080
+#define ADR_MIN     0x080E0000
+#define ADR_MAX     0x080E0040
+#define ADR_MIDL    0x080E0080
 
-
+FLASH_Status st;
 uint16_t size_r[6][2];
 volatile sbus_msg_t sbus_msg;
 mavlink_message_t message;
@@ -727,7 +727,7 @@ void fnSaveY(void)
 {
     FLASH_Unlock();
     FLASH_ClearFlag(FLASH_FLAG_EOP | FLASH_FLAG_OPERR | FLASH_FLAG_WRPERR | FLASH_FLAG_PGAERR | FLASH_FLAG_PGPERR | FLASH_FLAG_PGSERR);
-    FLASH_EraseSector(FLASH_Sector_7, VoltageRange_3);
+    st = FLASH_EraseSector(FLASH_Sector_11, VoltageRange_3);
     delay_ms(50);
     uint16_t *pArr = (uint16_t *)&min_val[0];
     uint32_t start_adr = ADR_MIN;
