@@ -76,5 +76,14 @@
 #define L15_PORT GPIOB
 #define L15_PIN  GPIO_Pin_0
 //
+// для w5500 -----------------------
+// spi1 sck B3
+// spi1 miso B4
+// spi1 mosi B5
+#define SPI1_CS_PIN  GPIO_Pin_6
+#define SPI1_CS_PORT  GPIOB
+#define SPI1_RESET_PIN  GPIO_Pin_7
+#define SPI1_RESET_PORT  GPIOB
+//----------------------------------
 #endif // HARD_CONFIG_H
 

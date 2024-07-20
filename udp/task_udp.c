@@ -98,7 +98,7 @@ PROCESS_THREAD(task_udp_process, ev, data)
                 register_wizchip();
                 W5500_CS_Init(); // Initialize W5500,  RST INT
                 W5500_RST_Init();
-                GPIO_ResetBits(GPIOC, GPIO_Pin_15);
+                W5500_RESET(0);
                 mode_init = PAUSE_0;
                 delay_pause = 0;
                 break;
@@ -106,7 +106,7 @@ PROCESS_THREAD(task_udp_process, ev, data)
                 delay_pause++;
                 if (delay_pause == 5)
                 {
-                    GPIO_SetBits(GPIOC, GPIO_Pin_15);
+                    W5500_RESET(1);
                     delay_pause = 0;
                     mode_init = PAUSE_1;
                 }
@@ -115,7 +115,6 @@ PROCESS_THREAD(task_udp_process, ev, data)
                 delay_pause++;
                 if (delay_pause == 5)
                 {
-                    GPIO_SetBits(GPIOC, GPIO_Pin_15);
                     delay_pause = 0;
                     mode_init = END_INIT;
                 }

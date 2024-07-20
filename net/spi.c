@@ -5,29 +5,29 @@
 void W5500_CS_Init(void)
 {
     GPIO_InitTypeDef GPIO_InitStruct = {0};
-    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
-    // SPI-CS (PC14)
-    GPIO_InitStruct.GPIO_Pin = GPIO_Pin_14 ;
+    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
+    // SPI-CS (PB6)
+    GPIO_InitStruct.GPIO_Pin = SPI1_CS_PIN;
     GPIO_InitStruct.GPIO_Mode = GPIO_Mode_OUT;
     GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
     GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_UP;
     GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_Init(GPIOC, &GPIO_InitStruct);
-    GPIO_SetBits(GPIOC, GPIO_Pin_14);
+    GPIO_Init(SPI1_CS_PORT, &GPIO_InitStruct);
+    GPIO_SetBits(SPI1_CS_PORT, SPI1_CS_PIN);
 }
 
 void W5500_RST_Init(void)
 {
     GPIO_InitTypeDef GPIO_InitStruct = {0};
-    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
-    // SPI-RES (PC15)
-    GPIO_InitStruct.GPIO_Pin = GPIO_Pin_15 ;
+    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
+    // SPI-RES (PB7)
+    GPIO_InitStruct.GPIO_Pin = SPI1_RESET_PIN ;
     GPIO_InitStruct.GPIO_Mode = GPIO_Mode_OUT;
     GPIO_InitStruct.GPIO_OType = GPIO_OType_OD;
     GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_UP;
     GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_Init(GPIOC, &GPIO_InitStruct);
-    GPIO_SetBits(GPIOC, GPIO_Pin_15);
+    GPIO_Init(SPI1_RESET_PORT, &GPIO_InitStruct);
+    GPIO_SetBits(SPI1_RESET_PORT, SPI1_RESET_PIN);
 }
 //--------------------------------------------------
 void SPI1_WriteByte(uint8_t TxData)
@@ -69,7 +69,7 @@ void SPI_CrisExit(void)
   */
 void SPI_CS_Select(void)
 {
-    GPIO_ResetBits(GPIOC, GPIO_Pin_14);
+    GPIO_ResetBits(SPI1_CS_PORT, SPI1_CS_PIN);
 }
 /**
   * @brief
@@ -77,7 +77,7 @@ void SPI_CS_Select(void)
   */
 void SPI_CS_Deselect(void)
 {
-    GPIO_SetBits(GPIOC, GPIO_Pin_14);
+    GPIO_SetBits(SPI1_CS_PORT, SPI1_CS_PIN);
 }
 //-------------------------------------------
 void register_wizchip()
@@ -95,8 +95,7 @@ void SPI1_Init(void)
 {
     GPIO_InitTypeDef GPIO_InitStructure;
     RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
-    // SCK:PA5, MISO:PA6, MOSI:PA7 or PB3, PB4, PB5
-    //    // SCK:PA5, MISO:PA6, MOSI:PA7 or PB3, PB4, PB5
+    //PB3, PB4, PB5
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1, ENABLE);
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3 | GPIO_Pin_4 | GPIO_Pin_5;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
