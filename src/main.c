@@ -19,6 +19,7 @@ process_event_t event_kill;
 volatile send_free_t send_free;
 // ----------------------------------------------
 
+
 PROCESS(led_process, "Led");
 PROCESS_THREAD(led_process, ev, data)
 {
@@ -32,7 +33,7 @@ PROCESS_THREAD(led_process, ev, data)
     GPIO_InitStruct.GPIO_Mode = GPIO_Mode_OUT;
     GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
     GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_UP;
-    GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_InitStruct.GPIO_Speed = GPIO_Speed_100MHz;
     GPIO_Init(GPIOC, &GPIO_InitStruct);
     while (1)
     {

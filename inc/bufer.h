@@ -36,6 +36,10 @@ REZ_BUFER fnGetBufer_Ser(void);
 extern struct process bufer_process;
 extern uint16_t len_s;
 extern volatile  uint8_t arr_ser[];
+extern volatile  uint8_t arr_rf[512];
 
+extern uint16_t len_n;
+extern uint16_t len_s;
+extern uint16_t len_real_m;
 #endif //BUFERS_H
 

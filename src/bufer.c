@@ -36,25 +36,25 @@ PROCESS_THREAD(bufer_process, ev, data)
     while (1)
     {
         static struct etimer et;
-        etimer_set(&et, 2);
+        etimer_set(&et, 1);
         PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
         //
         if (fnGetBufer_Rf() == BUFER_OK)
         {
-            len_real_m =  sendto(0, (uint8_t *) arr_rf, len_n, (uint8_t *) adr_all_comp, 14550);
-            if (len_real_m != len_n)
-            {
-                cnt_rf++;
-                if (cnt_rf > 2)
-                {
-                    cnt_rf = 0;
-                    fnClearInit();
-                }
-            }
-            else
-            {
-                cnt_rf = 0;
-            }
+            len_real_m =  sendto(1, (uint8_t *) arr_rf, len_n, (uint8_t *) adr_all_comp, 14550);
+//            if (len_real_m != len_n)
+//            {
+//                cnt_rf++;
+//                if (cnt_rf > 2)
+//                {
+//                    cnt_rf = 0;
+//                    fnClearInit();
+//                }
+//            }
+//            else
+//            {
+//                cnt_rf = 0;
+//            }
         }
     }
     PROCESS_END();

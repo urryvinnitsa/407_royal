@@ -86,7 +86,7 @@ typedef enum
     GPIO_Speed_100MHz = 0x03  /*!< High speed on 30 pF (80 MHz Output max speed on 15 pF) */
 } GPIOSpeed_TypeDef;
 #define IS_GPIO_SPEED(SPEED) (((SPEED) == GPIO_Speed_2MHz) || ((SPEED) == GPIO_Speed_25MHz) || \
-                              ((SPEED) == GPIO_Speed_50MHz)||  ((SPEED) == GPIO_Speed_100MHz))
+                              ((SPEED) == GPIO_Speed_100MHz)||  ((SPEED) == GPIO_Speed_100MHz))
 
 /**
   * @brief  GPIO Configuration PullUp PullDown enumeration

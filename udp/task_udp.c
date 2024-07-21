@@ -24,7 +24,7 @@ const uint8_t adr_my[4] = {192, 168, 0, 20};
 uint8_t memsize[2][8] = { {2, 2, 2, 2, 2, 2, 2, 2}, {2, 2, 2, 2, 2, 2, 2, 2}};
 uint8_t buff_rf[512];
 const uint8_t adr_all_comp[4] = {192, 168, 0, 255};
-const uint8_t adr_868[4] = {192, 168, 0, 100};
+const uint8_t adr_868[4] = {192, 168, 0, 6};
 PROCESS(task_udp_process, "TaskUdp");
 //--------------------------------------------------------------------------
 void fnClearInit(void)

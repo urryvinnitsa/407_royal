@@ -11,7 +11,7 @@ void W5500_CS_Init(void)
     GPIO_InitStruct.GPIO_Mode = GPIO_Mode_OUT;
     GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
     GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_UP;
-    GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_InitStruct.GPIO_Speed = GPIO_Speed_100MHz;
     GPIO_Init(SPI1_CS_PORT, &GPIO_InitStruct);
     GPIO_SetBits(SPI1_CS_PORT, SPI1_CS_PIN);
 }
@@ -25,7 +25,7 @@ void W5500_RST_Init(void)
     GPIO_InitStruct.GPIO_Mode = GPIO_Mode_OUT;
     GPIO_InitStruct.GPIO_OType = GPIO_OType_OD;
     GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_UP;
-    GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_InitStruct.GPIO_Speed = GPIO_Speed_100MHz;
     GPIO_Init(SPI1_RESET_PORT, &GPIO_InitStruct);
     GPIO_SetBits(SPI1_RESET_PORT, SPI1_RESET_PIN);
 }
@@ -100,7 +100,7 @@ void SPI1_Init(void)
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3 | GPIO_Pin_4 | GPIO_Pin_5;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
     GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
     GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
     GPIO_Init(GPIOB, &GPIO_InitStructure);
     GPIO_PinAFConfig(GPIOB, GPIO_PinSource3, GPIO_AF_SPI1);
@@ -110,7 +110,7 @@ void SPI1_Init(void)
     RCC_APB2PeriphResetCmd(RCC_APB2Periph_SPI1, DISABLE);// stop reset SPI1
     SPI_InitTypeDef SPI_InitStructure;
     SPI_StructInit(&SPI_InitStructure); // set default settings
-    SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_64;// SPI_BaudRatePrescaler_8;
+    SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_16;// SPI_BaudRatePrescaler_8;
     SPI_InitStructure.SPI_CPHA = SPI_CPHA_1Edge; // data sampled at first edge
     SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;   // clock is low when idle
     SPI_InitStructure.SPI_CRCPolynomial = 7;

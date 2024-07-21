@@ -64,7 +64,7 @@ static void fnLedInit(void)
         GPIO_InitStruct.GPIO_Mode = GPIO_Mode_OUT;
         GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
         GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_UP;
-        GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
+        GPIO_InitStruct.GPIO_Speed = GPIO_Speed_100MHz;
         GPIO_Init(leds[i].Port_L, &GPIO_InitStruct);
         GPIO_ResetBits(leds[i].Port_L, leds[i].Pin_L);
     }

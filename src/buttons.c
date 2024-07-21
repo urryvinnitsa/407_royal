@@ -71,7 +71,7 @@ static void fnButtInit(void)
         GPIO_InitStruct.GPIO_Pin = buttons[i].Pin_B ;
         GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IN;
         GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_UP;
-        GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
+        GPIO_InitStruct.GPIO_Speed = GPIO_Speed_100MHz;
         GPIO_Init(buttons[i].Port_B, &GPIO_InitStruct);
     }
 }
