@@ -61,6 +61,7 @@ void fnGetMiddlVal(void);
 void fnSaveY(void);
 void fnReadY(void);
 uint16_t fnUsred(uint8_t index);
+static uint16_t value = 1100;
 //--------------------------------------------------
 #pragma inline
 void delay_us(uint16_t delay)
@@ -128,18 +129,30 @@ PROCESS_THREAD(task_adc_process, ev, data)
 //--------------------------------------------------
 void fnProcessAdc(void) // вызывается с периодичностью 1 мс
 {
+
+	static uint16_t m_cnt = 0;
     static uint8_t iCnt = 0;
     iCnt++;
+	m_cnt++;
     if (iCnt >= 40)
     {
         iCnt = 0;
         fnNormalize();
-        sbus_msg.channels[0] = 1100;//ADC1ConvertedVoltage[0];
-        sbus_msg.channels[1] = 1200;//3000 - ADC1ConvertedVoltage[1];
-        sbus_msg.channels[2] = 1300;//3000 - ADC1ConvertedVoltage[2];
-        sbus_msg.channels[3] = 1400;//ADC1ConvertedVoltage[3];
-        sbus_msg.channels[8] = 1500;//ADC1ConvertedVoltage[4];
-        sbus_msg.channels[9] = 1600;//3000 - ADC1ConvertedVoltage[5];
+			
+        sbus_msg.channels[0] = ADC1ConvertedVoltage[0];
+        sbus_msg.channels[1] = 3000 - ADC1ConvertedVoltage[1];
+        sbus_msg.channels[2] = 3000 - ADC1ConvertedVoltage[2];
+        sbus_msg.channels[3] = ADC1ConvertedVoltage[3];
+        sbus_msg.channels[8] = ADC1ConvertedVoltage[4];
+        sbus_msg.channels[9] = 3000 - ADC1ConvertedVoltage[5];
+			
+			// only test !!!!!!!!!!!!!!!!
+			for(int i = 0;i<16;i++)
+			{
+				sbus_msg.channels[i] =value;
+			}
+
+			// only test !!!!!!!!!!!!!!!!			
         mavlink_msg_rc_channels_override_pack(0xff, 158, &message, 1, 1,
                                               sbus_msg.channels[0], sbus_msg.channels[1], sbus_msg.channels[2], sbus_msg.channels[3],
                                               sbus_msg.channels[4], sbus_msg.channels[5], sbus_msg.channels[6],
@@ -148,7 +161,6 @@ void fnProcessAdc(void) // вызывается с периодичностью 
                                               sbus_msg.channels[15],
                                               1000, 2500);
         message.magic = 0xFD;//
-#if 0
         len = mavlink_msg_to_send_buffer((uint8_t *)buffer_sbus, &message);
         // отправляем пакеты в пиксу по уарту
         fnAddBufer_Ser((uint8_t *) buffer_sbus,  len);
@@ -167,8 +179,17 @@ void fnProcessAdc(void) // вызывается с периодичностью 
         {
             cnt_err = 0;
         }
-#endif
+
     }
+		if(m_cnt >1000)
+		{
+			m_cnt =0;
+			value+=10;
+			if(value >= 1500)
+			{
+				value = 1100;
+			}
+		}
 }
 //--------------------------------------------------
 void fnADC(void)

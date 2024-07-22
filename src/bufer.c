@@ -2,14 +2,11 @@
 // Файл  : bufers.c
 //--------------------------------------------------
 #include "main.h"
-#include "task_udp.h"
-
 #define BUF_SIZE_READ 64
 volatile  uint8_t arr_rf[512];
 volatile  uint8_t arr_ser[512];
 uint16_t len_n;
 uint16_t len_s;
-uint16_t len_real_m;
 //--------------------------------------------------------------
 void fnBuferInit(void);
 //--------------------------------------------------------------
@@ -25,8 +22,10 @@ volatile    uint16_t NumberOfItems_Ser; // количество записей �
 
 volatile  un_packet un_ser[BUF_SIZE_READ];
 
+
+
 #pragma pack()
-static uint8_t cnt_rf = 0;
+
 PROCESS(bufer_process, "Bufer");
 
 PROCESS_THREAD(bufer_process, ev, data)
@@ -41,20 +40,7 @@ PROCESS_THREAD(bufer_process, ev, data)
         //
         if (fnGetBufer_Rf() == BUFER_OK)
         {
-            len_real_m =  sendto(1, (uint8_t *) arr_rf, len_n, (uint8_t *) adr_all_comp, 14550);
-//            if (len_real_m != len_n)
-//            {
-//                cnt_rf++;
-//                if (cnt_rf > 2)
-//                {
-//                    cnt_rf = 0;
-//                    fnClearInit();
-//                }
-//            }
-//            else
-//            {
-//                cnt_rf = 0;
-//            }
+            sendto(0, (uint8_t *) arr_rf, len_n, (uint8_t *) adr_all_comp, 14550);
         }
     }
     PROCESS_END();
@@ -65,7 +51,7 @@ void fnBuferInit(void)
     // устанавливаем (обнуляем) стартовый указатель
     strBuffData_cRead_Rf = strBuffData_cWrite_Rf = 0;
     NumberOfItems_Rf = 0;
-    strBuffData_cRead_Ser = strBuffData_cWrite_Ser = 0;/*!<указатель записи*/
+	strBuffData_cRead_Ser = strBuffData_cWrite_Ser = 0;/*!<указатель записи*/
     NumberOfItems_Ser = 0; // количество записей в буфере
 }
 //--------------------------------------------------------------
@@ -73,7 +59,7 @@ REZ_BUFER fnAddBufer_Rf(uint8_t *arr_start, uint16_t len)// добавить  в
 {
     if (NumberOfItems_Rf == BUF_SIZE_READ)  // buffer is full
     {
-        return BUFER_BUSY; //
+        return BUFER_BUSY; //msgmav_rf.msg
     }
     un_rf[strBuffData_cWrite_Rf].len = len;
     for (int i = 0; i < len; i++)

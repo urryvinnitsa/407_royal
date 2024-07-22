@@ -23,7 +23,7 @@ const uint8_t adr_all[4] = {255, 255, 255, 255};
 const uint8_t adr_my[4] = {192, 168, 0, 20};
 uint8_t memsize[2][8] = { {2, 2, 2, 2, 2, 2, 2, 2}, {2, 2, 2, 2, 2, 2, 2, 2}};
 uint8_t buff_rf[512];
-const uint8_t adr_all_comp[4] = {192, 168, 0, 255};
+const uint8_t adr_all_comp[4] = {192, 168, 0, 6};
 const uint8_t adr_868[4] = {192, 168, 0, 6};
 PROCESS(task_udp_process, "TaskUdp");
 //--------------------------------------------------------------------------
@@ -128,18 +128,15 @@ PROCESS_THREAD(task_udp_process, ev, data)
                 network_init();
                 setSHAR(gWIZNETINFO.mac);
                 ctlnetwork(CN_GET_NETINFO, (void *)&gWIZNETINFO);
-                socket(0, Sn_MR_UDP, 8888, SF_IO_NONBLOCK);// для мп
+                socket(0, Sn_MR_UDP, 8888, SF_IO_NONBLOCK);// для мп передача
                 socket(1, Sn_MR_UDP, 8888, SF_IO_NONBLOCK);// для планки
+								socket(2, Sn_MR_UDP, 8888, SF_IO_NONBLOCK);// для мп прием
                 mode_eth = WORK_ETH;
                 break;
             }
             break;
         case WORK_ETH:
             len = recvfrom(0, buff_rf, 2000, (uint8_t *) addr, &port);
-            if (len == 0xFFFFFFFB)
-            {
-                fnClearInit();
-            }
             if (len > 0)
             {
                 if (len != SOCK_BUSY)
@@ -148,8 +145,10 @@ PROCESS_THREAD(task_udp_process, ev, data)
                     {
                         if (port == 14550)
                         {
-                            fnAddBufer_Ser((uint8_t *) &buff_rf[0],  len);// отправляем пакеты в пиксу по уарту
-                        }   // вынимаем из буфера в файле link_rf.c
+													IWDG_ReloadCounter();  
+													start_eth = 1;
+													fnAddBufer_Ser((uint8_t *)buff_rf,  len);
+                        }
                     }
                 }
             }// end len >0
