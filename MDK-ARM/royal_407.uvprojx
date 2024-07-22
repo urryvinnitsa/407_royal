@@ -340,7 +340,7 @@
               <MiscControls>--no_strict --gnu</MiscControls>
               <Define>USE_STDPERIPH_DRIVER,STM32F4XX,</Define>
               <Undefine></Undefine>
-              <IncludePath>..\inc;..\STM32F4xx_StdPeriph_Driver\inc;..\CMSIS\Include;..\CMSIS\Device\ST\STM32F4xx\Include;..\contiki;..\contiki\lib;..\contiki\sys;..\mavlink;..\mavlink\common;..\mavlink\minimal;..\W5500;..\net;..\udp;..\src</IncludePath>
+              <IncludePath>..\inc;..\STM32F4xx_StdPeriph_Driver\inc;..\CMSIS\Include;..\CMSIS\Device\ST\STM32F4xx\Include;..\mavlink;..\mavlink\common;..\mavlink\minimal;..\W5500;..\net;..\udp;..\src</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>

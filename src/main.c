@@ -10,13 +10,6 @@
 //-------------------------------------------------
 //флаги
 volatile flags_t flags;
-// оценка бездействия мк
-uint32_t idle_count = 0;
-//-----------------------------------------------
-// объявляем события, передаваемые между потоками
-//process_event_t event_button;
-//process_event_t event_1ms;
-//process_event_t event_kill;
 // ----------------------------------------------
 volatile send_free_t send_free;
 // ----------------------------------------------
@@ -59,7 +52,7 @@ int main(void)
     //    // cтендовый режим - напрямую с пиксой без радиоканала
     fnDMAInit(); // uART1
     fnBuferInit();
-    //    process_start(&bufer_process, NULL);
+    // 
     //--------------------------------------------------------
     while (1)
     {
@@ -70,12 +63,20 @@ int main(void)
             fnProcessButton();
             fnProcessLeds();
             fnProcessLink();
+            fnProcessAdc();
         }
-        if (fnGetModeETH() == WORK_ETH)
+        if (fnGetModeETH() == WORK_ETH)// 5500 в работе
         {
             if (fnGetBufer_Rf() == BUFER_OK)
             {
                 sendto(0, (uint8_t *) arr_rf, len_n, (uint8_t *) adr_all_comp, 14550);
+            }
+        }
+        if (send_free.u1 == 0)// дма отработал и свободен
+        {
+            if (fnGetBufer_Ser()  == BUFER_OK)
+            {
+                USART1SendDMA((uint8_t *)arr_ser, len_s);
             }
         }
     }

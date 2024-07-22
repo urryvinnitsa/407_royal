@@ -152,11 +152,11 @@ void fnProcessAdc(void) // вызывается с периодичностью 
             cnt_err = 0;
         }
     }
-    if (m_cnt > 1000)
+    if (m_cnt > 500)
     {
         m_cnt = 0;
         value += 10;
-        if (value >= 1500)
+        if (value >= 2000)
         {
             value = 1100;
         }

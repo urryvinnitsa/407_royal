@@ -18,13 +18,13 @@ void fnProcessLink(void)
         USART_ClearFlag(USART1, USART_IT_IDLE);
         usart_rx_check();
     }
-    if (send_free.u1 == 0)// дма отработал и свободен
-    {
-        if (fnGetBufer_Ser()  == BUFER_OK)
-        {
-            USART1SendDMA((uint8_t *)arr_ser, len_s);
-        }
-    }
+    //    if (send_free.u1 == 0)// дма отработал и свободен
+    //    {
+    //        if (fnGetBufer_Ser()  == BUFER_OK)
+    //        {
+    //            USART1SendDMA((uint8_t *)arr_ser, len_s);
+    //        }
+    //    }
 }
 //--------------------------------------------------
 void USART1_IRQHandler(void)
