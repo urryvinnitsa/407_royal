@@ -6,7 +6,7 @@
 #define ADC_J_H
 #include <stdint.h>
 #include <stdbool.h>
-extern struct process task_adc_process;
+
 #define VALUE_MIN 1000
 #define VALUE_MAX 2000
 #pragma pack(1)//выравниваем по 1 байту
@@ -22,6 +22,7 @@ typedef struct
 void fnDMA(void);
 void fnADC(void);
 void fnSaveY(void);
+void fnAdcInit(void);
 extern volatile uint16_t ADCConvertedValue[24];
 #endif //ADC_J
 

@@ -25,7 +25,9 @@ uint8_t memsize[2][8] = { {2, 2, 2, 2, 2, 2, 2, 2}, {2, 2, 2, 2, 2, 2, 2, 2}};
 uint8_t buff_rf[512];
 const uint8_t adr_all_comp[4] = {192, 168, 0, 6};
 const uint8_t adr_868[4] = {192, 168, 0, 6};
-PROCESS(task_udp_process, "TaskUdp");
+uint8_t addr[4];
+static int32_t len;
+uint16_t port;
 //--------------------------------------------------------------------------
 void fnClearInit(void)
 {
@@ -76,88 +78,76 @@ void network_init(void)
     ctlwizchip(CW_GET_ID, (void *)tmpstr);
 }
 //--------------------------------------------------------------------------
-PROCESS_THREAD(task_udp_process, ev, data)
+void fnProcessUDP()
 {
-    PROCESS_BEGIN();
-    uint8_t addr[4];
-    int32_t len;
-    uint16_t port;
-    while (1)
+    switch (mode_eth)
     {
-        static struct etimer et;
-        etimer_set(&et, 1);
-        PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
-        switch (mode_eth)
+    case INIT_ETH:
+        switch (mode_init)
         {
-        case INIT_ETH:
-            switch (mode_init)
+        case INIT_PIN:
+            //
+            SPI1_Init(); // SPI2: b3 b4 b5
+            register_wizchip();
+            W5500_CS_Init(); // Initialize W5500,  RST INT
+            W5500_RST_Init();
+            W5500_RESET(0);
+            mode_init = PAUSE_0;
+            delay_pause = 0;
+            break;
+        case PAUSE_0:
+            delay_pause++;
+            if (delay_pause == 5)
             {
-            case INIT_PIN:
-                //
-                SPI1_Init(); // SPI2: b3 b4 b5
-                register_wizchip();
-                W5500_CS_Init(); // Initialize W5500,  RST INT
-                W5500_RST_Init();
-                W5500_RESET(0);
-                mode_init = PAUSE_0;
+                W5500_RESET(1);
                 delay_pause = 0;
-                break;
-            case PAUSE_0:
-                delay_pause++;
-                if (delay_pause == 5)
-                {
-                    W5500_RESET(1);
-                    delay_pause = 0;
-                    mode_init = PAUSE_1;
-                }
-                break;
-            case PAUSE_1:
-                delay_pause++;
-                if (delay_pause == 5)
-                {
-                    delay_pause = 0;
-                    mode_init = END_INIT;
-                }
-                break;
-            case END_INIT:
-                Load_Net_Parameters();
-                if (ctlwizchip(0, (void *)memsize) == -1)
-                {
-                    while (1);
-                }
-                network_init();
-                setSHAR(gWIZNETINFO.mac);
-                ctlnetwork(CN_GET_NETINFO, (void *)&gWIZNETINFO);
-                socket(0, Sn_MR_UDP, 8888, SF_IO_NONBLOCK);// для мп передача
-                socket(1, Sn_MR_UDP, 8888, SF_IO_NONBLOCK);// для планки
-								socket(2, Sn_MR_UDP, 8888, SF_IO_NONBLOCK);// для мп прием
-                mode_eth = WORK_ETH;
-                break;
+                mode_init = PAUSE_1;
             }
             break;
-        case WORK_ETH:
-            len = recvfrom(0, buff_rf, 2000, (uint8_t *) addr, &port);
-            if (len > 0)
+        case PAUSE_1:
+            delay_pause++;
+            if (delay_pause == 5)
             {
-                if (len != SOCK_BUSY)
-                {
-                    if (len != SOCKERR_SOCKMODE)
-                    {
-                        if (port == 14550)
-                        {
-													IWDG_ReloadCounter();  
-													start_eth = 1;
-													fnAddBufer_Ser((uint8_t *)buff_rf,  len);
-                        }
-                    }
-                }
-            }// end len >0
+                delay_pause = 0;
+                mode_init = END_INIT;
+            }
+            break;
+        case END_INIT:
+            Load_Net_Parameters();
+            if (ctlwizchip(0, (void *)memsize) == -1)
+            {
+                while (1);
+            }
+            network_init();
+            setSHAR(gWIZNETINFO.mac);
+            ctlnetwork(CN_GET_NETINFO, (void *)&gWIZNETINFO);
+            socket(0, Sn_MR_UDP, 8888, SF_IO_NONBLOCK);// для мп передача прием
+            socket(1, Sn_MR_UDP, 8888, SF_IO_NONBLOCK);// для планки
+            mode_eth = WORK_ETH;
             break;
         }
-        //-----------------------------------------------
-    } // end while(1)
+        break;
+    case WORK_ETH:
+        len = recvfrom(0, buff_rf, 2000, (uint8_t *) addr, &port);
+        if (len > 0)
+        {
+            if (len != SOCK_BUSY)
+            {
+                if (len != SOCKERR_SOCKMODE)
+                {
+                    if (port == 14550)
+                    {
+                        IWDG_ReloadCounter();
+                        start_eth = 1;
+                        fnAddBufer_Ser((uint8_t *)buff_rf,  len);
+                    }
+                }
+            }
+        }// end len >0
+        break;
+    }
+    //-----------------------------------------------
     //    close(0);
-    PROCESS_END();
 }
 //--------------------------------------------------------------------------
 

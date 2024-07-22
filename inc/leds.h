@@ -6,7 +6,6 @@
 #define __LEDS_H
 #include "stm32f4xx.h"
 
-extern struct process leds_process;
 #define LED_MAX 16
 typedef struct
 {
@@ -17,8 +16,8 @@ extern const leds_t leds[LED_MAX];
 
 typedef enum {LED_OFF = 1, LED_ON = 0, LED_BLINK = 2} LED_MODE;
 extern LED_MODE led_arr[LED_MAX];
-
-
+void fnLedsInit(void);
+void fnProcessLeds(void);
 
 
 #endif //__LEDS_H

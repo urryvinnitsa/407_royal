@@ -26,32 +26,32 @@ volatile  un_packet un_ser[BUF_SIZE_READ];
 
 #pragma pack()
 
-PROCESS(bufer_process, "Bufer");
 
-PROCESS_THREAD(bufer_process, ev, data)
-{
-    PROCESS_BEGIN();
-    fnBuferInit();
-    while (1)
-    {
-        static struct etimer et;
-        etimer_set(&et, 1);
-        PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
-        //
-        if (fnGetBufer_Rf() == BUFER_OK)
-        {
-            sendto(0, (uint8_t *) arr_rf, len_n, (uint8_t *) adr_all_comp, 14550);
-        }
-    }
-    PROCESS_END();
-}
+
+//PROCESS_THREAD(bufer_process, ev, data)
+//{
+//    PROCESS_BEGIN();
+//    fnBuferInit();
+//    while (1)
+//    {
+//        static struct etimer et;
+//        etimer_set(&et, 1);
+//        PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
+//        //
+//        if (fnGetBufer_Rf() == BUFER_OK)
+//        {
+//            sendto(0, (uint8_t *) arr_rf, len_n, (uint8_t *) adr_all_comp, 14550);
+//        }
+//    }
+//    PROCESS_END();
+//}
 //--------------------------------------------------------------
 void fnBuferInit(void)
 {
     // устанавливаем (обнуляем) стартовый указатель
     strBuffData_cRead_Rf = strBuffData_cWrite_Rf = 0;
     NumberOfItems_Rf = 0;
-	strBuffData_cRead_Ser = strBuffData_cWrite_Ser = 0;/*!<указатель записи*/
+    strBuffData_cRead_Ser = strBuffData_cWrite_Ser = 0;/*!<указатель записи*/
     NumberOfItems_Ser = 0; // количество записей в буфере
 }
 //--------------------------------------------------------------

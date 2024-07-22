@@ -11,7 +11,7 @@
 #include <string.h>
 #include <stdint.h>
 #include <stdio.h>
-#include "contiki.h"
+//#include "contiki.h"
 #include "mavlink.h"
 //
 #include "spi.h"
@@ -26,9 +26,9 @@
 #include "link_rf.h"
 #include "bufer.h"
 // сигналы до потоков ---
-extern process_event_t event_button;
-extern process_event_t event_1ms;
-extern process_event_t event_kill;
+//extern process_event_t event_button;
+//extern process_event_t event_1ms;
+//extern process_event_t event_kill;
 
 typedef struct
 {
@@ -39,7 +39,14 @@ typedef struct
 
 extern volatile send_free_t send_free;
 
-
+typedef struct
+{
+    bool ms_1;
+    bool ms_250;
+    bool serv_pack;
+    uint16_t icntPow;
+} flags_t;
+extern volatile flags_t flags;
 //----------------------
 #endif /* __MAIN_H */
 

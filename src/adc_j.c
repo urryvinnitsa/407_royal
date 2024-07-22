@@ -18,7 +18,7 @@ uint8_t buffer_sbus[256];
 uint8_t arr_s[256];
 void fnClearLed5(void);
 void fnSendBinUart1(const uint8_t *s, int16_t len);
-int len;
+static int len;
 volatile uint16_t ADCConvertedValue[24];//384
 __IO uint32_t ADC1ConvertedVoltage[6];
 typedef enum {S_WORK = 0, S_CAL} MODE_DATA;
@@ -84,11 +84,8 @@ void delay_ms(uint16_t delay)
     while (--delay);
 }
 //--------------------------------------------------
-
-PROCESS(task_adc_process, "T_adc");
-PROCESS_THREAD(task_adc_process, ev, data)
+void fnAdcInit(void)
 {
-    PROCESS_BEGIN();
     for (int i = 0; i < LED_MAX; i++)
     {
         led_arr[i] = LED_OFF;
@@ -104,55 +101,30 @@ PROCESS_THREAD(task_adc_process, ev, data)
     }
     sbus_msg.channels[4] = 1000;
     sbus_msg.channels[5] = 1000;
-    while (1)
-    {
-        PROCESS_WAIT_EVENT_UNTIL(ev == event_1ms || ev == event_button);
-        un.i = (*(uint32_t *)data);
-        if (ev == event_1ms)
-        {
-            if (mode_data == S_WORK)
-            {
-                fnProcessAdc();
-            }
-            else if (mode_data == S_CAL)
-            {
-                fnCalibr();
-            }
-        }
-        if (ev == event_button)
-        {
-            fnCalcButtons();
-        }
-    }
-    PROCESS_END();
 }
 //--------------------------------------------------
 void fnProcessAdc(void) // вызывается с периодичностью 1 мс
 {
-
-	static uint16_t m_cnt = 0;
+    static uint16_t m_cnt = 0;
     static uint8_t iCnt = 0;
     iCnt++;
-	m_cnt++;
+    m_cnt++;
     if (iCnt >= 40)
     {
         iCnt = 0;
         fnNormalize();
-			
         sbus_msg.channels[0] = ADC1ConvertedVoltage[0];
         sbus_msg.channels[1] = 3000 - ADC1ConvertedVoltage[1];
         sbus_msg.channels[2] = 3000 - ADC1ConvertedVoltage[2];
         sbus_msg.channels[3] = ADC1ConvertedVoltage[3];
         sbus_msg.channels[8] = ADC1ConvertedVoltage[4];
         sbus_msg.channels[9] = 3000 - ADC1ConvertedVoltage[5];
-			
-			// only test !!!!!!!!!!!!!!!!
-			for(int i = 0;i<16;i++)
-			{
-				sbus_msg.channels[i] =value;
-			}
-
-			// only test !!!!!!!!!!!!!!!!			
+        // only test !!!!!!!!!!!!!!!!
+        for (int i = 0; i < 16; i++)
+        {
+            sbus_msg.channels[i] = value;
+        }
+        // only test !!!!!!!!!!!!!!!!
         mavlink_msg_rc_channels_override_pack(0xff, 158, &message, 1, 1,
                                               sbus_msg.channels[0], sbus_msg.channels[1], sbus_msg.channels[2], sbus_msg.channels[3],
                                               sbus_msg.channels[4], sbus_msg.channels[5], sbus_msg.channels[6],
@@ -179,17 +151,16 @@ void fnProcessAdc(void) // вызывается с периодичностью 
         {
             cnt_err = 0;
         }
-
     }
-		if(m_cnt >1000)
-		{
-			m_cnt =0;
-			value+=10;
-			if(value >= 1500)
-			{
-				value = 1100;
-			}
-		}
+    if (m_cnt > 1000)
+    {
+        m_cnt = 0;
+        value += 10;
+        if (value >= 1500)
+        {
+            value = 1100;
+        }
+    }
 }
 //--------------------------------------------------
 void fnADC(void)

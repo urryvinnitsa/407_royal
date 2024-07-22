@@ -5,7 +5,7 @@
 #define BUTTONS_H
 #include "stm32f4xx.h"
 
-extern struct process button_process;
+
 #define BUTTON_MAX 16
 typedef struct
 {
@@ -13,6 +13,7 @@ typedef struct
     uint16_t Pin_B;
 } buttons_t;
 extern const buttons_t buttons[BUTTON_MAX];
-
+void     fnButtInit(void);
+void fnProcessButton(void);
 #endif //BUTTONS_H
 

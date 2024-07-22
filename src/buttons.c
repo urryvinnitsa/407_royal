@@ -15,7 +15,7 @@ static  but_t but[BUTTON_MAX];
 #define kn_ot(x) {but[x].otj=1;but[x].st =0;but[x].blok=0; but[x].naj=0;}
 #define kn_nj(x)  {but[x].naj=1;but[x].st =BUT_TIME_MAX;but[x].otj=0;}
 
-static void fnButtInit(void);
+void fnButtInit(void);
 static void fnButtRead(void);
 static void fnSetRegButt(void);
 static uint16_t rez_butt = 0; // new
@@ -43,26 +43,14 @@ const buttons_t buttons[BUTTON_MAX] = {\
                                        [14].Port_B = B14_PORT, [14].Pin_B = B14_PIN, \
                                        [15].Port_B = B15_PORT, [15].Pin_B = B15_PIN, \
                                       };
-
-
-PROCESS(button_process, "Button");
 //---------------------------------------------------
-PROCESS_THREAD(button_process, ev, data)
+void fnProcessButton(void)
 {
-    PROCESS_BEGIN();
-    fnButtInit();
-    while (1)
-    {
-        static struct etimer et;
-        etimer_set(&et, 1);
-        PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
-        fnButtRead();
-        fnSetRegButt();
-    }
-    PROCESS_END();
+    fnButtRead();
+    fnSetRegButt();
 }
 //---------------------------------------------------
-static void fnButtInit(void)
+void fnButtInit(void)
 {
     uint8_t i;
     GPIO_InitTypeDef GPIO_InitStruct = {0};
@@ -130,7 +118,6 @@ static void fnSetRegButt(void)
                 {
                     un.arr[1] = 0; //unpress
                 }
-                //process_post(&task_adc_process, event_button, &un.i);
                 break;
             }
         }

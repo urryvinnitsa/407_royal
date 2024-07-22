@@ -11,32 +11,20 @@ uint8_t usart_rx_dma_buffer[512];
 uint8_t usart_tx_dma_buffer[512];
 void usart_rx_check(void);
 //--------------------------------------------------
-
-//--------------------------------------------------
-PROCESS(link_rf_process, "LinkRF");
-PROCESS_THREAD(link_rf_process, ev, data)
+void fnProcessLink(void)
 {
-    PROCESS_BEGIN();
-    fnDMAInit();
-    while (1)
+    if (USART_GetITStatus(USART1, USART_IT_IDLE) != RESET)
     {
-        static struct etimer et;
-        etimer_set(&et, 1);
-        PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
-        if (USART_GetITStatus(USART1, USART_IT_IDLE) != RESET)
+        USART_ClearFlag(USART1, USART_IT_IDLE);
+        usart_rx_check();
+    }
+    if (send_free.u1 == 0)// дма отработал и свободен
+    {
+        if (fnGetBufer_Ser()  == BUFER_OK)
         {
-            USART_ClearFlag(USART1, USART_IT_IDLE);
-					            usart_rx_check();
+            USART1SendDMA((uint8_t *)arr_ser, len_s);
         }
-			if (send_free.u1 == 0)// дма отработал и свободен
-			{
-				if (fnGetBufer_Ser()  == BUFER_OK)
-				{
-						USART1SendDMA((uint8_t *)arr_ser, len_s);
-				}
-			}
-		}			
-    PROCESS_END();
+    }
 }
 //--------------------------------------------------
 void USART1_IRQHandler(void)
@@ -44,7 +32,6 @@ void USART1_IRQHandler(void)
     if (USART_GetITStatus(USART1, USART_IT_IDLE) != RESET)
     {
         USART_ClearFlag(USART1, USART_IT_IDLE);
-	
         usart_rx_check();
     }
 }
@@ -78,14 +65,6 @@ void fnDMAInit(void)
     USART_ClearFlag(USART1, USART_FLAG_CTS);
     USART_Cmd(USART1, ENABLE);
     USART_ITConfig(USART1, USART_IT_IDLE, ENABLE);
-#if 0
-    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_1);
-    NVIC_InitStructure.NVIC_IRQChannel = USART1_IRQn;
-    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
-    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
-    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-    NVIC_Init(&NVIC_InitStructure);
-#endif
     DMA_DeInit(DMA2_Stream2);
     DMA_Cmd(DMA2_Stream2, DISABLE);
     //
@@ -115,8 +94,8 @@ void fnDMAInit(void)
     NVIC_EnableIRQ(DMA2_Stream2_IRQn);
     USART_DMACmd(USART1, USART_DMAReq_Rx, ENABLE);
     DMA_Cmd(DMA2_Stream2, ENABLE); // RUN
-	//
-	DMA_DeInit(DMA2_Stream7);
+    //
+    DMA_DeInit(DMA2_Stream7);
     DMA_Cmd(DMA2_Stream7, DISABLE);
     //
     DMA_StructInit(&DMA_InitStructureRX);

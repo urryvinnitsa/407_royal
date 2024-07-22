@@ -27,13 +27,13 @@ typedef struct
 } un_packet;
 
 #pragma pack()
-
+void fnBuferInit(void);
 REZ_BUFER fnAddBufer_Rf(uint8_t *arr_start, uint16_t len);
 REZ_BUFER fnGetBufer_Rf(void);
 REZ_BUFER fnAddBufer_Ser(uint8_t *arr_start, uint16_t len);
 REZ_BUFER fnGetBufer_Ser(void);
 
-extern struct process bufer_process;
+
 extern uint16_t len_s;
 extern volatile  uint8_t arr_ser[];
 extern volatile  uint8_t arr_rf[512];

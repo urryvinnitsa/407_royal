@@ -110,7 +110,7 @@ void SPI1_Init(void)
     RCC_APB2PeriphResetCmd(RCC_APB2Periph_SPI1, DISABLE);// stop reset SPI1
     SPI_InitTypeDef SPI_InitStructure;
     SPI_StructInit(&SPI_InitStructure); // set default settings
-    SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_8;// SPI_BaudRatePrescaler_8;
+    SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_4;// SPI_BaudRatePrescaler_8;
     SPI_InitStructure.SPI_CPHA = SPI_CPHA_1Edge; // data sampled at first edge
     SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;   // clock is low when idle
     SPI_InitStructure.SPI_CRCPolynomial = 7;

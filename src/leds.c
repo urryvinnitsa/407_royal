@@ -3,7 +3,7 @@
 //! Файл                               : leds.c
 //**************************************************
 #include "main.h"
-static void fnLedInit(void);
+void fnLedInit(void);
 static void fnSetLed(void);
 //---------------------------------
 static struct
@@ -31,30 +31,19 @@ const leds_t leds[LED_MAX] = {\
                               [14].Port_L = L14_PORT, [14].Pin_L = L14_PIN, \
                               [15].Port_L = L15_PORT, [15].Pin_L = L15_PIN, \
                              };
-
-PROCESS(leds_process, "LED");
 //---------------------------------------------------
-PROCESS_THREAD(leds_process, ev, data)
+void fnProcessLeds(void)
 {
-    PROCESS_BEGIN();
-    fnLedInit();
-    while (1)
+    str_led.cnt++;
+    if (str_led.cnt >= 300)
     {
-        static struct etimer et;
-        etimer_set(&et, 10);
-        PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
-        str_led.cnt++;
-        if (str_led.cnt >= 30)
-        {
-            str_led.cnt = 0;
-            str_led.blink ^= 1;
-        }
-        fnSetLed();
+        str_led.cnt = 0;
+        str_led.blink ^= 1;
     }
-    PROCESS_END();
+    fnSetLed();
 }
 //----------------------------------------------------
-static void fnLedInit(void)
+void fnLedsInit(void)
 {
     uint8_t i;
     GPIO_InitTypeDef GPIO_InitStruct = {0};
