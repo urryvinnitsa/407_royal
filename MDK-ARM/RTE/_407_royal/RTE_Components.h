@@ -3,8 +3,8 @@
  * Auto generated Run-Time-Environment Configuration File
  *      *** Do not modify ! ***
  *
- * Project: 'royal_407'
- * Target:  '407_royal'
+ * Project: 'royal_407' 
+ * Target:  '407_royal' 
  */
 
 #ifndef RTE_COMPONENTS_H
@@ -12,7 +12,7 @@
 
 
 /*
- * Define the Device Header File:
+ * Define the Device Header File: 
  */
 #define CMSIS_device_header "stm32f4xx.h"
 

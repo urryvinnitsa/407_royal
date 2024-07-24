@@ -38,6 +38,14 @@ int main(void)
 {
     SystemInit();
     TIM2_Init();
+	// тактируем все порты
+		RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA |
+    RCC_AHB1Periph_GPIOB|
+	  RCC_AHB1Periph_GPIOC|
+    RCC_AHB1Periph_GPIOD|
+    RCC_AHB1Periph_GPIOE|
+    RCC_AHB1Periph_GPIOF|
+    RCC_AHB1Periph_GPIOG, ENABLE);
     //-----------------------------------
     // запуск светика индикации работы
     fnLedInit();
@@ -52,7 +60,7 @@ int main(void)
     //    // cтендовый режим - напрямую с пиксой без радиоканала
     fnDMAInit(); // uART1
     fnBuferInit();
-    // 
+    //
     //--------------------------------------------------------
     while (1)
     {
@@ -106,7 +114,6 @@ void TIM2_Init(void)
 //--------------------------------------------------------
 void   fnLedInit(void)
 {
-    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
     GPIO_InitTypeDef GPIO_InitStruct;
     GPIO_InitStruct.GPIO_Pin = GPIO_Pin_13 ; //
     GPIO_InitStruct.GPIO_Mode = GPIO_Mode_OUT;
