@@ -14,17 +14,13 @@ static  but_t but[BUTTON_MAX];
 #define BUT_TIME_MAX 10
 #define kn_ot(x) {but[x].otj=1;but[x].st =0;but[x].blok=0; but[x].naj=0;}
 #define kn_nj(x)  {but[x].naj=1;but[x].st =BUT_TIME_MAX;but[x].otj=0;}
-
+uint8_t new_button;
 void fnButtInit(void);
 static void fnButtRead(void);
 static void fnSetRegButt(void);
 static uint16_t rez_butt = 0; // new
 static uint16_t rez_butt_old = 0; // old
-static union
-{
-    uint16_t arr[2];
-    uint32_t i;
-} un;
+
 const buttons_t buttons[BUTTON_MAX] = {\
                                        [0].Port_B = B0_PORT, [0].Pin_B = B0_PIN, \
                                        [1].Port_B = B1_PORT, [1].Pin_B = B1_PIN, \
@@ -132,7 +128,9 @@ static void fnSetRegButt(void)
         //            un.i = 0xBBBB;
         //            process_post(&task_adc_process, event_button, &un.i);
         //        }
+				
         rez_butt_old = rez_butt;
+				new_button=1;
     }
 }
 //----------------------------------------------------------------

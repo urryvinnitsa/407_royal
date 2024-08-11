@@ -25,6 +25,13 @@ void fnSaveY(void);
 void fnAdcInit(void);
 void fnProcessAdc(void);
 extern volatile uint16_t ADCConvertedValue[24];
+// сюда приходят данные от потока кнопок, код кнопки и состояние - нажата или отжата
+typedef union
+{
+    uint16_t arr[2];
+    uint32_t i;
+} un_t;
+extern un_t un;
 #endif //ADC_J
 
 

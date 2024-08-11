@@ -25,12 +25,7 @@ typedef enum {S_WORK = 0, S_CAL} MODE_DATA;
 typedef enum {GET_MIN = 0, GET_MAX, GET_MIDDL} GET_DATA;
 static GET_DATA get_data = GET_MIN;
 static MODE_DATA mode_data = S_WORK;
-// сюда приходят данные от потока кнопок, код кнопки и состояние - нажата или отжата
-static union
-{
-    uint16_t arr[2];
-    uint32_t i;
-} un;
+
 //-----------------------------------------------------------------------------------
 static uint16_t iCntCl = 0;
 static uint16_t min_val[6];
@@ -62,6 +57,7 @@ void fnSaveY(void);
 void fnReadY(void);
 uint16_t fnUsred(uint8_t index);
 static uint16_t value = 1100;
+un_t un;
 //--------------------------------------------------
 #pragma inline
 void delay_us(uint16_t delay)
@@ -107,6 +103,11 @@ void fnProcessAdc(void) // вызывается с периодичностью 
 {
     static uint16_t m_cnt = 0;
     static uint8_t iCnt = 0;
+		if(new_button)
+		{
+			new_button = 0;
+			fnCalcButtons();
+		}
     iCnt++;
     m_cnt++;
     if (iCnt >= 40)

@@ -15,5 +15,6 @@ typedef struct
 extern const buttons_t buttons[BUTTON_MAX];
 void     fnButtInit(void);
 void fnProcessButton(void);
+extern uint8_t new_button;
 #endif //BUTTONS_H
 
