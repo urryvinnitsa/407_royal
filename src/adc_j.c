@@ -84,9 +84,9 @@ void fnAdcInit(void)
 {
     for (int i = 0; i < LED_MAX; i++)
     {
-        led_arr[i] = LED_OFF;
+        led_arr[i] = LED_BLINK;
     }
-    //    led_arr[12] = LED_ON;
+        led_arr[15] = LED_ON;
     //    fnReadY();
     //    fnInitSize();
     fnDMA();
@@ -99,15 +99,15 @@ void fnAdcInit(void)
     sbus_msg.channels[5] = 1000;
 }
 //--------------------------------------------------
-void fnProcessAdc(void) // вызывается с периодичностью 1 мс
+void fnWorkMode(void)
 {
     static uint16_t m_cnt = 0;
     static uint8_t iCnt = 0;
-		if(new_button)
-		{
-			new_button = 0;
-			fnCalcButtons();
-		}
+    if (new_button)
+    {
+        new_button = 0;
+        fnCalcButtons();
+    }
     iCnt++;
     m_cnt++;
     if (iCnt >= 40)
@@ -161,6 +161,18 @@ void fnProcessAdc(void) // вызывается с периодичностью 
         {
             value = 1100;
         }
+    }
+}
+//--------------------------------------------------
+void fnProcessAdc(void) // вызывается с периодичностью 1 мс
+{
+    if (mode_data == S_WORK)
+    {
+        fnWorkMode();
+    }
+    if (mode_data == S_CAL)
+    {
+        fnCalibr();
     }
 }
 //--------------------------------------------------

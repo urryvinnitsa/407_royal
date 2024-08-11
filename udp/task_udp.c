@@ -21,7 +21,7 @@ static char start_eth = 0;
 wiz_NetInfo gWIZNETINFO;
 const uint8_t adr_all[4] = {255, 255, 255, 255};
 const uint8_t adr_my[4] = {192, 168, 0, 20};
-uint8_t memsize[2][8] = { {2, 2, 2, 2, 2, 2, 2, 2}, {2, 2, 2, 2, 2, 2, 2, 2}};
+uint8_t memsize[2][8] = { {4, 4, 4, 4, 0, 0, 0, 0}, {4,4, 4, 4, 0,0, 0,0}};
 uint8_t buff_rf[512];
 const uint8_t adr_all_comp[4] = {192, 168, 0, 6};
 const uint8_t adr_868[4] = {192, 168, 0, 6};
@@ -128,7 +128,7 @@ void fnProcessUDP()
         }
         break;
     case WORK_ETH:
-        len = recvfrom(0, buff_rf, 2000, (uint8_t *) addr, &port);
+        len = recvfrom(0, buff_rf, 4000, (uint8_t *) addr, &port);
         if (len > 0)
         {
             if (len != SOCK_BUSY)

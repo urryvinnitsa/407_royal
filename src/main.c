@@ -38,14 +38,14 @@ int main(void)
 {
     SystemInit();
     TIM2_Init();
-	// тактируем все порты
-		RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA |
-    RCC_AHB1Periph_GPIOB|
-	  RCC_AHB1Periph_GPIOC|
-    RCC_AHB1Periph_GPIOD|
-    RCC_AHB1Periph_GPIOE|
-    RCC_AHB1Periph_GPIOF|
-    RCC_AHB1Periph_GPIOG, ENABLE);
+    // тактируем все порты
+    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA |
+                           RCC_AHB1Periph_GPIOB |
+                           RCC_AHB1Periph_GPIOC |
+                           RCC_AHB1Periph_GPIOD |
+                           RCC_AHB1Periph_GPIOE |
+                           RCC_AHB1Periph_GPIOF |
+                           RCC_AHB1Periph_GPIOG, ENABLE);
     //-----------------------------------
     // запуск светика индикации работы
     fnLedInit();

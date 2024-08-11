@@ -35,7 +35,7 @@ const leds_t leds[LED_MAX] = {\
 void fnProcessLeds(void)
 {
     str_led.cnt++;
-    if (str_led.cnt >= 300)
+    if (str_led.cnt >= 200)
     {
         str_led.cnt = 0;
         str_led.blink ^= 1;

@@ -128,9 +128,8 @@ static void fnSetRegButt(void)
         //            un.i = 0xBBBB;
         //            process_post(&task_adc_process, event_button, &un.i);
         //        }
-				
         rez_butt_old = rez_butt;
-				new_button=1;
+        new_button = 1;
     }
 }
 //----------------------------------------------------------------
