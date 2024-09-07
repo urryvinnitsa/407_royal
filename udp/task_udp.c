@@ -23,7 +23,7 @@ const uint8_t adr_all[4] = {255, 255, 255, 255};
 const uint8_t adr_my[4] = {192, 168, 0, 20};
 uint8_t memsize[2][8] = { {4, 4, 4, 4, 0, 0, 0, 0}, {4,4, 4, 4, 0,0, 0,0}};
 uint8_t buff_rf[512];
-const uint8_t adr_all_comp[4] = {192, 168, 0, 6};
+const uint8_t adr_all_comp[4] = {192, 168, 0, 255};
 const uint8_t adr_868[4] = {192, 168, 0, 6};
 uint8_t addr[4];
 static int32_t len;

@@ -84,11 +84,12 @@ void fnAdcInit(void)
 {
     for (int i = 0; i < LED_MAX; i++)
     {
-        led_arr[i] = LED_BLINK;
+        led_arr[i] = LED_OFF;
     }
-        led_arr[15] = LED_ON;
-    //    fnReadY();
-    //    fnInitSize();
+        led_arr[0] = LED_ON;
+		//led_arr[8] = LED_BLINK;
+       fnReadY();
+       fnInitSize();
     fnDMA();
     fnADC();
     for (int i = 0; i < 16; i++)
@@ -97,6 +98,25 @@ void fnAdcInit(void)
     }
     sbus_msg.channels[4] = 1000;
     sbus_msg.channels[5] = 1000;
+		sbus_msg.channels[7] = 2000;
+		if ((!GPIO_ReadInputDataBit(B5_PORT, B5_PIN)))
+		{
+			            led_arr[5] = LED_ON;
+             sbus_msg.channels[15] = 2000;
+		}
+		else
+		{
+				            led_arr[5] = LED_OFF;
+             sbus_msg.channels[15] = 1000;		
+		}
+//				if ((!GPIO_ReadInputDataBit(B8_PORT, B8_PIN)))
+//		{
+//             sbus_msg.channels[7] = 2000;
+//		}
+//		else
+//		{
+//             sbus_msg.channels[7] = 1000;		
+//		}
 }
 //--------------------------------------------------
 void fnWorkMode(void)
@@ -121,10 +141,10 @@ void fnWorkMode(void)
         sbus_msg.channels[8] = ADC1ConvertedVoltage[4];
         sbus_msg.channels[9] = 3000 - ADC1ConvertedVoltage[5];
         // only test !!!!!!!!!!!!!!!!
-        for (int i = 0; i < 16; i++)
-        {
-            sbus_msg.channels[i] = value;
-        }
+//        for (int i = 0; i < 16; i++)
+//        {
+//            sbus_msg.channels[i] = value;
+//        }
         // only test !!!!!!!!!!!!!!!!
         mavlink_msg_rc_channels_override_pack(0xff, 158, &message, 1, 1,
                                               sbus_msg.channels[0], sbus_msg.channels[1], sbus_msg.channels[2], sbus_msg.channels[3],
@@ -136,7 +156,7 @@ void fnWorkMode(void)
         message.magic = 0xFD;//
         len = mavlink_msg_to_send_buffer((uint8_t *)buffer_sbus, &message);
         // отправляем пакеты в пиксу по уарту
-        fnAddBufer_Ser((uint8_t *) buffer_sbus,  len);
+//        fnAddBufer_Ser((uint8_t *) buffer_sbus,  len);
         // отправляем пакеты на планку по юдп
         len_real =   sendto(1, (uint8_t *) buffer_sbus, len, (uint8_t *) adr_all_comp, 14555);
         if (len_real != len)
@@ -153,15 +173,15 @@ void fnWorkMode(void)
             cnt_err = 0;
         }
     }
-    if (m_cnt > 500)
-    {
-        m_cnt = 0;
-        value += 10;
-        if (value >= 2000)
-        {
-            value = 1100;
-        }
-    }
+//    if (m_cnt > 500)
+//    {
+//        m_cnt = 0;
+//        value += 10;
+//        if (value >= 2000)
+//        {
+//            value = 1100;
+//        }
+//    }
 }
 //--------------------------------------------------
 void fnProcessAdc(void) // вызывается с периодичностью 1 мс
@@ -270,6 +290,7 @@ uint16_t fnCalcValue(uint8_t index)
         return VALUE_MAX;
     }
     //----------------------------------------------
+
     //получение ближайшего значения
     if (summa < midl_val_r[index])
     {
@@ -366,13 +387,13 @@ void fnSendBinUart1(const uint8_t *s, int16_t len)
 //--------------------------------------------------
 void fnClearLed5(void)
 {
-    led_arr[0] = led_arr[4] = led_arr[8] = led_arr[12] = led_arr[13] = LED_OFF;
+    led_arr[0] = led_arr[1] = led_arr[2] = led_arr[3] = led_arr[4] = LED_OFF;
 }
 //--------------------------------------------------
 void fnSetMin(void)
 {
-    led_arr[12] = led_arr[8] = led_arr[4] = LED_BLINK;
-    led_arr[0] = led_arr[13] =  LED_OFF;
+    led_arr[0] = led_arr[1] = led_arr[2] = LED_BLINK;
+    led_arr[3] = led_arr[4] =  LED_OFF;
     get_data = GET_MIN;
     min_val[0] = min_val[1] = min_val[2] = 4095;
     min_val[3] = min_val[4] = min_val[5] = 4095;
@@ -380,8 +401,8 @@ void fnSetMin(void)
 //--------------------------------------------------
 void fnSetMax(void)
 {
-    led_arr[0] = led_arr[13]  = LED_BLINK;
-    led_arr[12] = led_arr[8] = led_arr[4] = LED_OFF;
+    led_arr[3] = led_arr[4]  = LED_BLINK;
+    led_arr[0] = led_arr[1] = led_arr[2] = LED_OFF;
     get_data = GET_MAX;
     max_val[0] = max_val[1] = max_val[2] = 0;
     max_val[3] = max_val[4] = max_val[5] = 0;
@@ -389,8 +410,8 @@ void fnSetMax(void)
 //--------------------------------------------------
 void fnSetMiddl(void)
 {
-    led_arr[0] = led_arr[13] = led_arr[12] = LED_BLINK;
-    led_arr[8] = led_arr[4]  = LED_BLINK;
+    led_arr[0] = led_arr[1] = led_arr[2] = LED_BLINK;
+    led_arr[3] = led_arr[4]  = LED_BLINK;
     get_data = GET_MIDDL;
 }
 //--------------------------------------------------
@@ -402,6 +423,7 @@ void fnCalcButtons(void)
     uint16_t press = un.arr[1];
     if (un.arr[0] == 0xAAAA)
     {
+			IWDG_ReloadCounter();
         mode_data = S_CAL;
         iCntCl = 0;
         fnSetMin();
@@ -409,121 +431,117 @@ void fnCalcButtons(void)
     }
     switch (butt)
     {
-    case 0:// F0
+    case 0:// F0  wba
         if (press)
         {
             if (mode_data == S_WORK)
             {
                 fnClearLed5();
                 sbus_msg.channels[4] = 1000;
-                led_arr[12] = LED_ON;
+                led_arr[0] = LED_ON;
             }
         }
         break;
-    case 0x01:// F1
+    case 0x01:// F1 cruise
         if (press)
         {
             if (mode_data == S_WORK)
             {
                 fnClearLed5();
                 sbus_msg.channels[4] = 1295;
-                led_arr[8] = LED_ON;
+                led_arr[1] = LED_ON;
             }
         }
         break;
-    case 0x02:// F2
+    case 0x02:// F2 fbb
         if (press)
         {
             if (mode_data == S_WORK)
             {
                 fnClearLed5();
                 sbus_msg.channels[4] = 1425;
-                led_arr[4] = LED_ON;
+                led_arr[2] = LED_ON;
             }
         }
         break;
-    case 0x03:// F3
+    case 0x03:// F3 rtl
         if (press)
         {
             if (mode_data == S_WORK)
             {
                 fnClearLed5();
                 sbus_msg.channels[4] = 1555;
-                led_arr[0] = LED_ON;
+                led_arr[3] = LED_ON;
             }
         }
         break;
-    case 0x04: // F4
+    case 0x04: // F4 auto
         if (press)
         {
             if (mode_data == S_WORK)
             {
                 fnClearLed5();
                 sbus_msg.channels[4] = 1685;
-                led_arr[13] = LED_ON;
+                led_arr[4] = LED_ON;
             }
         }
         break;
-    case 0x06: // gps
+    case 0x05: // gps
         if (press)
         {
-            if (mode_data == S_WORK)
-            {
-                if (!gps)
-                {
-                    gps = 1;
-                    led_arr[5] = LED_ON;
-                    sbus_msg.channels[5] = 2000;
-                }
-                else
-                {
-                    gps = 0;
-                    led_arr[5] = LED_OFF;
-                    sbus_msg.channels[5] = 1000;
-                }
-            }
+
+            led_arr[5] = LED_ON;
+             sbus_msg.channels[15] = 2000;
+        }
+        else
+        {
+            led_arr[5] = LED_OFF;
+            sbus_msg.channels[15] = 1000;
+
         }
         break;
-    case 0x0B://+ ch11
+    case 0x08:// retrract
         if (mode_data == S_WORK)
         {
             if (press)
             {
-                sbus_msg.channels[11] = 2000;
+                sbus_msg.channels[7] = 1000;
+							led_arr[8] = LED_ON;
             }
             else
             {
-                sbus_msg.channels[11] = 1500;
+                sbus_msg.channels[7] = 2000;
+							led_arr[8] = LED_OFF;
             }
         }
         break;
-    case 0x09://track on
+    case 0x09://z+
         if (mode_data == S_WORK)
         {
             if (press)
             {
-                sbus_msg.channels[11] = 1000;
+                sbus_msg.channels[6] = 2000;
             }
             else
             {
-                sbus_msg.channels[11] = 1500;
+                sbus_msg.channels[6] = 1500;
             }
         }
         break;
-    case 0x0A: //ch12 snap
+    case 0x0A: //z-
         if (mode_data == S_WORK)
         {
             if (press)
             {
-                sbus_msg.channels[12] = 2000;
+                sbus_msg.channels[6] = 1000;
             }
             else
             {
-                sbus_msg.channels[12] = 1500;
+                sbus_msg.channels[6] = 1500;
             }
         }
         break;
-    case 5:// record
+    case 255:// record
         if (mode_data == S_WORK)
         {
             if (press)
@@ -546,7 +564,7 @@ void fnCalcButtons(void)
             }
         }
         break;
-    case 0x8://ch10+ зум-
+    case 0x80://ch10+ зум-
         if (mode_data == S_WORK)
         {
             if (press)
@@ -636,6 +654,7 @@ void fnCalibr(void)
     }
     if (iCntCl % 10 == 0)
     {
+			IWDG_ReloadCounter();
         switch (get_data)
         {
         case GET_MIN:

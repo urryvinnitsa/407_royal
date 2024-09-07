@@ -36,7 +36,7 @@ void TIM2_IRQHandler(void)
 //==============================================================================
 int main(void)
 {
-    SystemInit();
+   SystemInit();
     TIM2_Init();
     // тактируем все порты
     RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA |
@@ -61,6 +61,12 @@ int main(void)
     fnDMAInit(); // uART1
     fnBuferInit();
     //
+		
+		
+			IWDG_WriteAccessCmd(IWDG_WriteAccess_Enable);
+			IWDG_SetPrescaler(IWDG_Prescaler_32);
+			IWDG_SetReload(5000);
+			IWDG_Enable();
     //--------------------------------------------------------
     while (1)
     {
@@ -72,7 +78,9 @@ int main(void)
             fnProcessLeds();
             fnProcessLink();
             fnProcessAdc();
+					  IWDG_ReloadCounter();
         }
+			#if 0	
         if (fnGetModeETH() == WORK_ETH)// 5500 в работе
         {
             if (fnGetBufer_Rf() == BUFER_OK)
@@ -87,6 +95,7 @@ int main(void)
                 USART1SendDMA((uint8_t *)arr_ser, len_s);
             }
         }
+				#endif
     }
 }
 //--------------------------------------------------------

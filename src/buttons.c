@@ -118,17 +118,14 @@ static void fnSetRegButt(void)
             }
         }
         //---------------------------------------------------
-        //        if (rez_butt == 0xE)
-        //        {
-        //            un.i = 0xAAAA;
-        //            process_post(&task_adc_process, event_button, &un.i);
-        //        }
-        //        if (rez_butt == 0x0111)
-        //        {
-        //            un.i = 0xBBBB;
-        //            process_post(&task_adc_process, event_button, &un.i);
-        //        }
-        rez_butt_old = rez_butt;
+               if (rez_butt == 0x1c)
+                {
+                    un.i = 0xAAAA;
+                    new_button = 1;
+									 return;
+                }
+
+       rez_butt_old = rez_butt;
         new_button = 1;
     }
 }
